@@ -1,0 +1,95 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        {% block head %}
+            GeeksBlog
+        {% endblock head %}
+    </title>
+    <!-- Bootstrap CSS -->
+    <link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">  
+    <!-- Fontawesome CDN-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Custome stylesheet -->
+    <link rel="stylesheet" href='{% static "css/base.css" %}' />
+    {% block head_extra %}
+      
+    {% endblock head_extra %}
+</head>
+
+<body style="background-color:white">
+    {% include "navbar.html" %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                {% include "messages.html" %}
+                {% block content %} 
+                
+                {% endblock content %}
+            </div>
+            <div class="col-lg-4">
+                
+                    <div class="card my-4">
+                        <h5 class="card-header">Search</h5>
+                        <div class="card-body">
+                            <form action="" method="GET">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="q" placeholder="Search Post" value="{{ request.GET.q }}">
+                                    <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-default" style="border-color:grey;background-color:whitesmoke"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                                               
+                    <!-- Side Widget -->
+                    <div class="card my-4">
+                        <div class="card-body" style="height:500px">
+                            You can put anything you want inside of these side widgets.
+                        </div>
+                    </div>
+                    
+                    
+                    
+                
+            </div>
+        </div>
+    </div>   
+
+    {% include "footer.html" %}
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery.min.js' %}" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+
+    <script src="{% static 'js/marked.min.js' %}"></script>
+    
+    <!-- Custom JS Code -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".content").each(function(){
+                var content = $(this).text()
+                var mark = marked(content)
+                $(this).html(mark)
+            })
+            $(".post-detail img").each(function () {
+                $(this).addClass("img-fluid")
+            })
+            $(".comment-reply-btn").click(function(event){
+                event.preventDefault();
+                $(this).parent().next(".comment-reply").fadeToggle();
+            })
+        })
+        
+    </script> 
+</body>
+</html>

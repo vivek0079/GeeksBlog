@@ -1,0 +1,86 @@
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Create | GeeksBlog
+    </title>
+    <!-- Bootstrap CSS -->
+    <link href='{% static "css/bootstrap1.min.css" %}' rel="stylesheet">  
+    <!-- Custome stylesheet -->
+    <link rel="stylesheet" href='{% static "css/base.css" %}' />
+
+    {{ form.media }}
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-11">
+                <div class="col-sm-6 col-lg-6">
+                    <h1 class="text-center">Preview</h1>
+                    <div class="content-preview">
+                        <h3 id="preview-title"></h3>
+                        <p id="preview-content"></p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-6">
+                    <h1 class="text-center">Form</h1>
+                
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %} {{ form | crispy }}
+                        <input type="submit" class="btn-btn-default" value="Create Post">
+                    </form>
+                    <br><br><br>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+        <!-- jQuery -->
+    <script src="{% static 'js/jquery.min.js' %}" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
+    <script src="{% static 'js/marked.min.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            
+            var content = $("#id_content");
+            function setContent(value){
+                var markedContent = marked(value)
+                $("#preview-content").html(markedContent)
+                $("#preview-content img").each(function(){
+                    $(this).addClass("img-responsive")
+                })
+            }
+            setContent(content.val())
+            content.keyup(function(){
+                var newContent = $(this).val()
+                setContent(newContent)
+            })
+
+
+
+            var title = $("#id_title");
+            function setTitle(value){
+                $("#preview-title").text(value)
+
+            }
+            setTitle(title.val())
+            title.keyup(function(){
+                var newContent = $(this).val()
+                setTitle(newContent)
+            })
+       })
+    </script>
+</body>
+
+</html>

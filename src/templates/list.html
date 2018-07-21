@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block head %}
+  {{ block.super }} | Posts
+{% endblock head %}
+
+{% block content %}
+
+<h1 class="my-4">
+</h1> 
+{% for obj in object_list %}
+<div class="card mb-4">
+    <div class="card-body ">
+        {% if obj.draft %}
+        <h3>
+            <strong>Staff only: Draft</strong>
+        </h3>
+        {% if obj.publish > today %}
+        <h3>
+            <strong>Staff only:Future Post</strong>
+        </h3>
+        {% endif %} {% endif %}
+        <h2 class="card-title">{{ obj.title}}</h2>
+        <hr>
+        <p class="card-text post-detail">{{ obj.get_markdown | truncatewords:15 }}</p><br>
+        <a href="{{ obj.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
+    </div>
+    <div class="card-footer text-muted">
+        Posted on {{ obj.publish|date:"d F Y" }} by {% if obj.user.get_full_name %}
+        <p>Author: {{ obj.user.get_full_name }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% if object_list %}
+<p class="text-center">Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}</p>
+{% else %}
+<p class="text-center">Page 1 of 1</p>
+{% endif %}
+<!-- Pagination -->
+<ul class="pagination justify-content-center mb-4">
+    {% if object_list.has_previous %}
+    <li class="page-item">
+        <a class="page-link" href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&larr; Older</a>
+    </li>
+    {% endif %} {% if object_list.has_next %}
+    <li class="page-item">
+        <a class="page-link" href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Newer &rarr;</a>
+    </li>
+    {% endif %}
+</ul>
+{% endblock content %} 
